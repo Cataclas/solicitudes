@@ -1,14 +1,20 @@
 package co.com.crediya.config;
 
-import org.springframework.context.annotation.ComponentScan;
+import co.com.crediya.model.estado.gateways.EstadoRepository;
+import co.com.crediya.model.solicitud.gateways.SolicitudRepository;
+import co.com.crediya.model.tipoprestamo.gateways.TipoPrestamoRepository;
+import co.com.crediya.usecase.solicitud.RegistrarSolicitudUseCase;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 
 @Configuration
-@ComponentScan(basePackages = "co.com.crediya.usecase",
-        includeFilters = {
-                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "^.+UseCase$")
-        },
-        useDefaultFilters = false)
 public class UseCasesConfig {
+    
+    @Bean
+    public RegistrarSolicitudUseCase registrarSolicitudUseCase(
+            SolicitudRepository solicitudRepository,
+            TipoPrestamoRepository tipoPrestamoRepository,
+            EstadoRepository estadoRepository) {
+        return new RegistrarSolicitudUseCase(solicitudRepository, tipoPrestamoRepository, estadoRepository);
+    }
 }
