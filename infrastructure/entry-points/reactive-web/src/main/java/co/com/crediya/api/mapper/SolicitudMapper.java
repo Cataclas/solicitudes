@@ -19,10 +19,9 @@ public class SolicitudMapper {
         }
         
         return Solicitud.builder()
+                .idUsuario(dto.getIdUsuario())
                 .monto(dto.getMonto())
                 .plazo(dto.getPlazo())
-                .email(dto.getEmail())
-                .documentoIdentidad(dto.getDocumentoIdentidad())
                 .idTipoPrestamo(dto.getIdTipoPrestamo())
                 .build();
     }
@@ -32,8 +31,6 @@ public class SolicitudMapper {
         dto.setIdSolicitud(solicitud.getIdSolicitud());
         dto.setMonto(solicitud.getMonto());
         dto.setPlazo(solicitud.getPlazo());
-        dto.setEmail(solicitud.getEmail());
-        dto.setDocumentoIdentidad(solicitud.getDocumentoIdentidad());
         dto.setEstado(toEstadoDTO(estado));
         dto.setTipoPrestamo(toTipoPrestamoDTO(tipoPrestamo));
         dto.setCreatedAt(solicitud.getCreatedAt());

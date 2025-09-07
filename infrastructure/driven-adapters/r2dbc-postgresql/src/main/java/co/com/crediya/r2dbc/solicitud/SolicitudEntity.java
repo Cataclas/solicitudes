@@ -15,17 +15,14 @@ public class SolicitudEntity {
     @Column("id_solicitud")
     private String idSolicitud;
     
+    @Column("id_usuario")
+    private String idUsuario;
+    
     @Column("monto")
     private BigDecimal monto;
     
     @Column("plazo")
     private Integer plazo;
-    
-    @Column("email")
-    private String email;
-    
-    @Column("documento_identidad")
-    private String documentoIdentidad;
     
     @Column("id_estado")
     private Integer idEstado;

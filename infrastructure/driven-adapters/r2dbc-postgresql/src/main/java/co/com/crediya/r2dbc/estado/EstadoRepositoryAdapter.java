@@ -21,4 +21,11 @@ public class EstadoRepositoryAdapter implements EstadoRepository {
         return r2dbcRepository.findByNombre(nombre)
                 .map(mapper::toDomain);
     }
+    
+    @Override
+    public Mono<Estado> findById(Integer idEstado) {
+        log.debug("Buscando estado por ID: {}", idEstado);
+        return r2dbcRepository.findById(idEstado)
+                .map(mapper::toDomain);
+    }
 }

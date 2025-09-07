@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 public class RegistrarSolicitudUseCase {
@@ -23,7 +22,6 @@ public class RegistrarSolicitudUseCase {
     private final TipoPrestamoRepository tipoPrestamoRepository;
     private final EstadoRepository estadoRepository;
     
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
     private static final String ESTADO_INICIAL = "PENDIENTE_REVISION";
 
     public Mono<Solicitud> registrar(Solicitud solicitud) {
@@ -48,19 +46,11 @@ public class RegistrarSolicitudUseCase {
         if (solicitud.getPlazo() == null) {
             errores.add("El plazo es obligatorio");
         }
-        if (esNuloOVacio(solicitud.getEmail())) {
-            errores.add("El email es obligatorio");
-        }
-        if (esNuloOVacio(solicitud.getDocumentoIdentidad())) {
-            errores.add("El documento de identidad es obligatorio");
+        if (esNuloOVacio(solicitud.getIdUsuario())) {
+            errores.add("El ID de usuario es obligatorio");
         }
         if (solicitud.getIdTipoPrestamo() == null) {
             errores.add("El tipo de préstamo es obligatorio");
-        }
-        
-        // Validar formatos solo si los campos no están vacíos
-        if (!esNuloOVacio(solicitud.getEmail()) && !EMAIL_PATTERN.matcher(solicitud.getEmail()).matches()) {
-            errores.add("El formato del email no es válido");
         }
         
         if (solicitud.getMonto() != null && solicitud.getMonto().compareTo(BigDecimal.ZERO) <= 0) {

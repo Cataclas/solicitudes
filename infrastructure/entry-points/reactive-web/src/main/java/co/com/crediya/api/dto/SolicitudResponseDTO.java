@@ -19,12 +19,6 @@ public class SolicitudResponseDTO {
     @Schema(description = "Plazo en meses", example = "24")
     private Integer plazo;
 
-    @Schema(description = "Email del solicitante", example = "cliente@email.com")
-    private String email;
-
-    @Schema(description = "Documento de identidad", example = "12345678")
-    private String documentoIdentidad;
-
     @Schema(description = "Estado de la solicitud")
     private EstadoDTO estado;
 
