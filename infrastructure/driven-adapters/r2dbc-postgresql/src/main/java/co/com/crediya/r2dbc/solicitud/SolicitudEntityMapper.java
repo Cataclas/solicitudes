@@ -9,9 +9,9 @@ public class SolicitudEntityMapper {
     public SolicitudEntity toEntity(Solicitud solicitud) {
         SolicitudEntity entity = new SolicitudEntity();
         entity.setIdSolicitud(solicitud.getIdSolicitud());
+        entity.setIdUsuario(solicitud.getIdUsuario());
         entity.setMonto(solicitud.getMonto());
         entity.setPlazo(solicitud.getPlazo());
-        entity.setEmail(solicitud.getEmail());
         entity.setIdEstado(solicitud.getIdEstado());
         entity.setIdTipoPrestamo(solicitud.getIdTipoPrestamo());
         // Campos de auditoría
@@ -26,9 +26,9 @@ public class SolicitudEntityMapper {
     public Solicitud toDomain(SolicitudEntity entity) {
         return Solicitud.builder()
                 .idSolicitud(entity.getIdSolicitud())
+                .idUsuario(entity.getIdUsuario())
                 .monto(entity.getMonto())
                 .plazo(entity.getPlazo())
-                .email(entity.getEmail())
                 .idEstado(entity.getIdEstado())
                 .idTipoPrestamo(entity.getIdTipoPrestamo())
                 // Campos de auditoría

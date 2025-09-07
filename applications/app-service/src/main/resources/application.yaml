@@ -32,6 +32,17 @@ management:
 cors:
   allowed-origins: "http://localhost:4200,http://localhost:8080,http://localhost:8082"
 
+jwt:
+  secret: ${JWT_SECRET:mySecretKeyForJWTTokenGenerationThatMustBeAtLeast256BitsLongToBeSecure}
+  expiration-hours: ${JWT_EXPIRATION_HOURS:24}
+
+# Configuración del microservicio de autenticación
+auth:
+  service:
+    url: ${AUTH_SERVICE_URL:http://localhost:8080}
+    validate-token-endpoint: ${AUTH_VALIDATE_ENDPOINT:/api/v1/validate-token}
+    service-secret: ${AUTH_SERVICE_SECRET:serviceToServiceSecretKeyThatMustBeAtLeast256BitsLongForHS256Algorithm}
+
 logging:
   level:
     co.com.crediya: ${LOG_LEVEL:INFO}

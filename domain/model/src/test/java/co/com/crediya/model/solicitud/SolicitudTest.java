@@ -15,8 +15,7 @@ class SolicitudTest {
         String idSolicitud = "SOL-001";
         BigDecimal monto = new BigDecimal("1000000");
         Integer plazo = 12;
-        String email = "test@email.com";
-        String documento = "12345678";
+        String idUsuario = "550e8400-e29b-41d4-a716-446655440005";
         Integer idEstado = 1;
         Integer idTipoPrestamo = 1;
         LocalDateTime now = LocalDateTime.now();
@@ -26,8 +25,7 @@ class SolicitudTest {
                 .idSolicitud(idSolicitud)
                 .monto(monto)
                 .plazo(plazo)
-                .email(email)
-                .documentoIdentidad(documento)
+                .idUsuario(idUsuario)
                 .idEstado(idEstado)
                 .idTipoPrestamo(idTipoPrestamo)
                 .createdAt(now)
@@ -42,8 +40,7 @@ class SolicitudTest {
         assertEquals(idSolicitud, solicitud.getIdSolicitud());
         assertEquals(monto, solicitud.getMonto());
         assertEquals(plazo, solicitud.getPlazo());
-        assertEquals(email, solicitud.getEmail());
-        assertEquals(documento, solicitud.getDocumentoIdentidad());
+        assertEquals(idUsuario, solicitud.getIdUsuario());
         assertEquals(idEstado, solicitud.getIdEstado());
         assertEquals(idTipoPrestamo, solicitud.getIdTipoPrestamo());
         assertEquals(now, solicitud.getCreatedAt());
@@ -60,8 +57,7 @@ class SolicitudTest {
                 .idSolicitud("SOL-001")
                 .monto(new BigDecimal("1000000"))
                 .plazo(12)
-                .email("test@email.com")
-                .documentoIdentidad("12345678")
+                .idUsuario("550e8400-e29b-41d4-a716-446655440005")
                 .idEstado(1)
                 .idTipoPrestamo(1)
                 .active(true)
@@ -92,8 +88,7 @@ class SolicitudTest {
         assertNull(solicitud.getIdSolicitud());
         assertNull(solicitud.getMonto());
         assertNull(solicitud.getPlazo());
-        assertNull(solicitud.getEmail());
-        assertNull(solicitud.getDocumentoIdentidad());
+        assertNull(solicitud.getIdUsuario());
         assertNull(solicitud.getIdEstado());
         assertNull(solicitud.getIdTipoPrestamo());
     }
@@ -104,19 +99,19 @@ class SolicitudTest {
         Solicitud solicitud1 = Solicitud.builder()
                 .idSolicitud("SOL-001")
                 .monto(new BigDecimal("1000000"))
-                .email("test@email.com")
+                .idUsuario("550e8400-e29b-41d4-a716-446655440005")
                 .build();
 
         Solicitud solicitud2 = Solicitud.builder()
                 .idSolicitud("SOL-001")
                 .monto(new BigDecimal("1000000"))
-                .email("test@email.com")
+                .idUsuario("550e8400-e29b-41d4-a716-446655440005")
                 .build();
 
         Solicitud solicitud3 = Solicitud.builder()
                 .idSolicitud("SOL-002")
                 .monto(new BigDecimal("2000000"))
-                .email("otro@email.com")
+                .idUsuario("550e8400-e29b-41d4-a716-446655440006")
                 .build();
 
         // Then
@@ -134,7 +129,7 @@ class SolicitudTest {
         Solicitud solicitud = Solicitud.builder()
                 .idSolicitud("SOL-001")
                 .monto(new BigDecimal("1000000"))
-                .email("test@email.com")
+                .idUsuario("550e8400-e29b-41d4-a716-446655440005")
                 .build();
 
         // When
@@ -144,7 +139,7 @@ class SolicitudTest {
         assertNotNull(toString);
         assertTrue(toString.contains("SOL-001"));
         assertTrue(toString.contains("1000000"));
-        assertTrue(toString.contains("test@email.com"));
+        assertTrue(toString.contains("550e8400-e29b-41d4-a716-446655440005"));
     }
 
     @Test
@@ -153,8 +148,7 @@ class SolicitudTest {
         String idSolicitud = "SOL-TEST";
         BigDecimal monto = new BigDecimal("500000");
         Integer plazo = 24;
-        String email = "setter@test.com";
-        String documento = "87654321";
+        String idUsuario = "550e8400-e29b-41d4-a716-446655440005";
         Integer idEstado = 3;
         Integer idTipoPrestamo = 2;
         LocalDateTime now = LocalDateTime.now();
@@ -165,8 +159,7 @@ class SolicitudTest {
                 .idSolicitud(idSolicitud)
                 .monto(monto)
                 .plazo(plazo)
-                .email(email)
-                .documentoIdentidad(documento)
+                .idUsuario(idUsuario)
                 .idEstado(idEstado)
                 .idTipoPrestamo(idTipoPrestamo)
                 .createdAt(now)
@@ -180,8 +173,7 @@ class SolicitudTest {
         assertEquals(idSolicitud, solicitud.getIdSolicitud());
         assertEquals(monto, solicitud.getMonto());
         assertEquals(plazo, solicitud.getPlazo());
-        assertEquals(email, solicitud.getEmail());
-        assertEquals(documento, solicitud.getDocumentoIdentidad());
+        assertEquals(idUsuario, solicitud.getIdUsuario());
         assertEquals(idEstado, solicitud.getIdEstado());
         assertEquals(idTipoPrestamo, solicitud.getIdTipoPrestamo());
         assertEquals(now, solicitud.getCreatedAt());

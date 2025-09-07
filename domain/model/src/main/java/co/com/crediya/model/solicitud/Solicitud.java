@@ -10,10 +10,9 @@ import java.time.LocalDateTime;
 @Builder(toBuilder = true)
 public class Solicitud {
     private String idSolicitud;
+    private String idUsuario;
     private BigDecimal monto;
     private Integer plazo;
-    private String email;
-    private String documentoIdentidad;
     private Integer idEstado;
     private Integer idTipoPrestamo;
     // Campos de auditoría

@@ -1,47 +1,188 @@
-# Proyecto Base Implementando Clean Architecture
+# Microservicio de Solicitudes - CrediYa
 
-## Antes de Iniciar
+[![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://openjdk.java.net/projects/jdk/21/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.4-brightgreen.svg)](https://spring.io/projects/spring-boot)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue.svg)](https://www.postgresql.org/)
+[![PiTest](https://img.shields.io/badge/PiTest-Enabled-red.svg)](https://pitest.org/)
+[![Clean Architecture](https://img.shields.io/badge/Architecture-Clean-green.svg)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 
-Empezaremos por explicar los diferentes componentes del proyectos y partiremos de los componentes externos, continuando con los componentes core de negocio (dominio) y por último el inicio y configuración de la aplicación.
+## 📋 Descripción
 
-Lee el artículo [Clean Architecture — Aislando los detalles](https://medium.com/bancolombia-tech/clean-architecture-aislando-los-detalles-4f9530f35d7a)
+Microservicio responsable de la gestión completa del ciclo de vida de solicitudes de préstamo en el sistema CrediYa. Implementa Clean Architecture con Spring WebFlux para programación reactiva, evaluación automática de solicitudes y comunicación segura con el microservicio de autenticación.
 
-# Arquitectura
+## 🏗️ Arquitectura
 
-![Clean Architecture](https://miro.medium.com/max/1400/1*ZdlHz8B0-qu9Y-QO3AXR_w.png)
+### Clean Architecture
+```
+├── domain/
+│   ├── model/          # Entidades de negocio y reglas
+│   └── usecase/        # Casos de uso y lógica de negocio
+├── infrastructure/
+│   ├── driven-adapters/    # Adaptadores de salida (BD, APIs)
+│   ├── entry-points/       # Adaptadores de entrada (REST)
+│   └── helpers/            # Utilidades y configuraciones
+└── applications/
+    └── app-service/        # Aplicación principal
+```
 
-## Domain
+### Responsabilidades
+- **Registro de Solicitudes**: CLIENTE puede crear solicitudes
+- **Listado de Solicitudes**: ASESOR puede listar y filtrar solicitudes
+- **Evaluación Automática**: Validación automática según reglas de negocio
+- **Integración con Auth**: Validación de tokens y usuarios
+- **Gestión de Estados**: Control del flujo de aprobación
 
-Es el módulo más interno de la arquitectura, pertenece a la capa del dominio y encapsula la lógica y reglas del negocio mediante modelos y entidades del dominio.
+## 🚀 Stack Tecnológico
 
-## Usecases
+- **Java 21** - Lenguaje de programación
+- **Spring Boot 3.5.4** - Framework principal
+- **Spring WebFlux** - Programación reactiva
+- **Spring R2DBC** - Acceso reactivo a base de datos
+- **PostgreSQL 15** - Base de datos
+- **JWT** - Autenticación y autorización
+- **Lombok** - Reducción de boilerplate
+- **Gradle 8.14.3** - Gestión de dependencias
+- **PiTest** - Testing de mutaciones
+- **JaCoCo** - Cobertura de código
 
-Este módulo gradle perteneciente a la capa del dominio, implementa los casos de uso del sistema, define lógica de aplicación y reacciona a las invocaciones desde el módulo de entry points, orquestando los flujos hacia el módulo de entities.
+## 📊 Base de Datos
 
-## Infrastructure
+### Esquema: crediya_solicitudes
 
-### Helpers
+#### Entidades Principales
+- **solicitud**: Solicitudes de préstamo con información completa
+- **tipo_prestamo**: Catálogo de productos financieros
+- **estados**: Estados del flujo de aprobación
 
-En el apartado de helpers tendremos utilidades generales para los Driven Adapters y Entry Points.
+#### Estados del Sistema
+1. **PENDIENTE** - Solicitud creada, pendiente de evaluación
+2. **EN_EVALUACION** - En proceso de evaluación manual
+3. **APROBADA** - Solicitud aprobada
+4. **RECHAZADA** - Solicitud rechazada
+5. **CANCELADA** - Solicitud cancelada por el usuario
 
-Estas utilidades no están arraigadas a objetos concretos, se realiza el uso de generics para modelar comportamientos
-genéricos de los diferentes objetos de persistencia que puedan existir, este tipo de implementaciones se realizan
-basadas en el patrón de diseño [Unit of Work y Repository](https://medium.com/@krzychukosobudzki/repository-design-pattern-bc490b256006)
+#### Tipos de Préstamo
+1. **PERSONAL** - Préstamo personal (validación automática)
+2. **HIPOTECARIO** - Préstamo hipotecario (evaluación manual)
+3. **VEHICULAR** - Préstamo vehicular (evaluación manual)
+4. **EDUCATIVO** - Préstamo educativo (validación automática)
 
-Estas clases no puede existir solas y debe heredarse su compartimiento en los **Driven Adapters**
+## 🔐 Seguridad e Integración
 
-### Driven Adapters
+### Comunicación con Microservicio de Autenticación
+- **Validación de Tokens**: Servicio a servicio para validar JWT
+- **Obtención de Usuario**: Información del usuario autenticado
+- **Autenticación**: Header Authorization: Bearer {token}
 
-Los driven adapter representan implementaciones externas a nuestro sistema, como lo son conexiones a servicios rest,
-soap, bases de datos, lectura de archivos planos, y en concreto cualquier origen y fuente de datos con la que debamos
-interactuar.
+### Flujo de Autenticación
+1. Cliente envía request con JWT token
+2. Microservicio valida token con servicio de autenticación
+3. Obtiene información del usuario (ID, rol, permisos)
+4. Procesa la solicitud según autorización
 
-### Entry Points
+### Autorización por Rol
+- **ASESOR**: Listar y gestionar todas las solicitudes
+- **CLIENTE**: Solo crear sus propias solicitudes
 
-Los entry points representan los puntos de entrada de la aplicación o el inicio de los flujos de negocio.
+## 📡 API Endpoints
 
-## Application
+### Principales Servicios
 
-Este módulo es el más externo de la arquitectura, es el encargado de ensamblar los distintos módulos, resolver las dependencias y crear los beans de los casos de use (UseCases) de forma automática, inyectando en éstos instancias concretas de las dependencias declaradas. Además inicia la aplicación (es el único módulo del proyecto donde encontraremos la función “public static void main(String[] args)”.
+#### Gestión de Solicitudes
+- `GET /api/v1/solicitud` - Listar solicitudes
+- `POST /api/v1/solicitud` - Crear nueva solicitud
 
-**Los beans de los casos de uso se disponibilizan automaticamente gracias a un '@ComponentScan' ubicado en esta capa.**
+### Documentación Completa
+- **Swagger UI**: `/webjars/swagger-ui/index.html`
+
+
+## 🛠️ Configuración
+
+### Variables de Entorno
+
+#### Base de Datos
+```env
+DB_HOST=<database-host>
+DB_PORT=<database-port>
+DB_NAME=<database-name>
+DB_USERNAME=<database-user>
+DB_PASSWORD=<database-password>
+```
+
+#### Integración con Autenticación
+```env
+AUTH_SERVICE_URL=<auth-service-url>
+AUTH_VALIDATE_ENDPOINT=<validate-endpoint>
+AUTH_SERVICE_SECRET=<service-secret-key-256-bits-minimum>
+```
+
+#### JWT y Aplicación
+```env
+SERVER_PORT=<application-port>
+JWT_SECRET=<jwt-secret-key-256-bits-minimum>
+JWT_EXPIRATION_HOURS=<token-expiration-hours>
+LOG_LEVEL=<log-level>
+DB_POOL_INITIAL=<initial-pool-size>
+DB_POOL_MAX=<max-pool-size>
+DB_POOL_IDLE=<idle-timeout>
+```
+
+## 🚀 Instalación y Ejecución
+
+### Prerrequisitos
+- Microservicio de Autenticación ejecutándose
+
+### 1. Configurar Base de Datos
+```bash
+# Desde el directorio raíz del proyecto
+cd ../database
+docker-compose up -d crediya-solicitudes-db
+```
+
+### 2. Compilar y Ejecutar
+
+#### Desarrollo Local
+```bash
+# Compilar
+./gradlew build
+
+# Ejecutar aplicación
+./gradlew bootRun
+```
+
+#### Producción con Docker
+```bash
+# Construir imagen
+docker build -f deployment/Dockerfile -t crediya-solicitudes:latest .
+
+# Ejecutar contenedor
+docker run -d \
+  --name crediya-solicitudes \
+  --network crediya-network \
+  -p 8082:8082 \
+  crediya-solicitudes:latest
+```
+
+## 📊 Monitoreo
+
+### Actuator Endpoints
+- **Health Check**: `/actuator/health` - Estado del servicio y dependencias
+- **Métricas**: `/actuator/metrics` - Métricas de la aplicación
+- **Info**: `/actuator/info` - Información de la aplicación
+- **Prometheus**: `/actuator/prometheus` - Métricas para Prometheus
+
+### Uso de Actuator
+```bash
+# Verificar estado del servicio
+curl http://localhost:8082/actuator/health
+
+# Ver métricas específicas
+curl http://localhost:8082/actuator/metrics/jvm.memory.used
+```
+
+### Métricas Clave
+- Solicitudes creadas/aprobadas/rechazadas
+- Tiempo de evaluación automática
+- Tiempo de validación de tokens
+- Conexiones de base de datos
+- Comunicación con servicio de autenticación

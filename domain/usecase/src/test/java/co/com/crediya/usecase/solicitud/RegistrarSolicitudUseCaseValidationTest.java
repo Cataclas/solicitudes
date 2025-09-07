@@ -45,8 +45,7 @@ class RegistrarSolicitudUseCaseValidationTest {
         Solicitud solicitud = Solicitud.builder()
                 .monto(null)
                 .plazo(12)
-                .email("test@email.com")
-                .documentoIdentidad("12345678")
+                .idUsuario("550e8400-e29b-41d4-a716-446655440005")
                 .idTipoPrestamo(1)
                 .build();
 
@@ -56,12 +55,11 @@ class RegistrarSolicitudUseCaseValidationTest {
     }
 
     @Test
-    void deberiaFallarCuandoEmailEsInvalido() {
+    void deberiaFallarCuandoIdUsuarioEsNulo() {
         Solicitud solicitud = Solicitud.builder()
                 .monto(new BigDecimal("1000000"))
                 .plazo(12)
-                .email("email-invalido")
-                .documentoIdentidad("12345678")
+                .idUsuario(null)
                 .idTipoPrestamo(1)
                 .build();
 
@@ -75,8 +73,7 @@ class RegistrarSolicitudUseCaseValidationTest {
         Solicitud solicitud = Solicitud.builder()
                 .monto(new BigDecimal("1000000"))
                 .plazo(null)
-                .email("test@email.com")
-                .documentoIdentidad("12345678")
+                .idUsuario("550e8400-e29b-41d4-a716-446655440005")
                 .idTipoPrestamo(1)
                 .build();
 

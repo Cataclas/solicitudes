@@ -1,5 +1,6 @@
 package co.com.crediya.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -23,19 +24,12 @@ public class SolicitudRequestDTO {
     @Schema(description = "Plazo en meses para el préstamo", example = "24", required = true)
     private Integer plazo;
 
-    @NotBlank(message = "El email es obligatorio")
-    @Email(message = "El formato del email no es válido")
-    @JsonProperty("email")
-    @Schema(description = "Email del solicitante", example = "cliente@email.com", required = true)
-    private String email;
-
-    @NotBlank(message = "El documento de identidad es obligatorio")
-    @JsonProperty("documento_identidad")
-    @Schema(description = "Documento de identidad del cliente", example = "12345678", required = true)
-    private String documentoIdentidad;
-
     @NotNull(message = "El tipo de préstamo es obligatorio")
     @JsonProperty("id_tipo_prestamo")
     @Schema(description = "ID del tipo de préstamo", example = "1", required = true)
     private Integer idTipoPrestamo;
+    
+    // Campo interno - no se expone en la API
+    @Schema(hidden = true)
+    private String idUsuario;
 }
